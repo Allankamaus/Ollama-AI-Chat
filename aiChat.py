@@ -7,8 +7,13 @@ def send_message(messages):
         "model": "llama2",
         "messages": messages
     })
+    data = response.json()
+   
+    if "message" not in data:
+        print("Unexpected response:", data)
+        return "Error: Unexpected response from Ollama."
+    return data["message"]["content"]
 
-    return response.json()["message"]["content"]
 
 def chat():
     print("Welcome to the AI Chat! Type 'exit' to quit.\n")
@@ -23,3 +28,6 @@ def chat():
         messages.append({"role": "user", "content": user_input})
         reply =  send_message(messages)
         messages.append({"role": "assistant", "content" : reply})
+
+
+chat()
