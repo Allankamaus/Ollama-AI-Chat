@@ -34,14 +34,14 @@ def chat():
     messages = [{"role": "system", "content": "You are a helpful assistant"}]
 
     while True:
-        user_input = input("You: ")
+        user_input = input("\nYou: ")
         if user_input.lower() == 'exit':
             print("Goodbye! linga guli guli wacha linga gu linga gu")
             break
 
         messages.append({"role": "user", "content": user_input})
         reply = send_message(messages)
-        print(f"AI: {reply}")  
+        print(f"\nAI: {reply}")  
         messages.append({"role": "assistant", "content": reply})
         
 
