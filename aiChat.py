@@ -1,7 +1,11 @@
 import requests
 import json
+import pyttsx3
+
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
+
+engine = pyttsx3.init()
 
 def format_ollama_response(content):
     if not content:
@@ -43,8 +47,15 @@ def chat():
         reply = send_message(messages)
         print(f"\nAI: {reply}")  
         messages.append({"role": "assistant", "content": reply})
+        engine.say(reply)
+        engine.runAndWait()
         
 
 
 if __name__ == "__main__":
     chat()
+
+
+
+
+
