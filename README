@@ -3,9 +3,14 @@
 This is a simple command-line chat application that connects to an Ollama server running locally. It uses the Llama 2 model to generate AI responses.
 
 ## Features
+V1
 - Interactive chat with an AI assistant
 - Maintains conversation context
 - Easy to use from the terminal
+
+V2
+-Allows the LLM to use tts to speak out its responses
+-Allows the user to use voice inputs to talk to the ai via stt
 
 ## Requirements
 - Python 3.x

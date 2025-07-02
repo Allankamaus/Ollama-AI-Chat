@@ -1,19 +1,29 @@
 import requests
 import json
 import pyttsx3
-
+import pyaudio
+import wave 
+from tts import *
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 
-engine = pyttsx3.init()
 
+
+# format Ollama's response for readability
+# returns a cleaned-up string
 def format_ollama_response(content):
     if not content:
         return "[No response received from Ollama.]"
     return content.strip()
 
+
+
+
+# send a message list to Ollama and return the AI's response as text
+# handles streaming JSON lines from the API
+# returns the assistant's reply as a string
 def send_message(messages):
-    response = requests.post(OLLAMA_URL, json ={
+    response = requests.post(OLLAMA_URL, json={
         "model": "llama2",
         "messages": messages
     }, stream=True)
@@ -33,25 +43,31 @@ def send_message(messages):
     return format_ollama_response(content)
 
 
+
+
+# main chat loop: gets user input, sends to Ollama, prints and speaks the response
+# continues until user types 'exit'
 def chat():
     print("Welcome to the AI Chat! Type 'exit' to quit.\n")
     messages = [{"role": "system", "content": "You are a helpful assistant"}]
 
     while True:
-        user_input = input("\nYou: ")
+        user_input = input("\nYou: ")  # get user input
         if user_input.lower() == 'exit':
             print("Goodbye! linga guli guli wacha linga gu linga gu")
             break
 
-        messages.append({"role": "user", "content": user_input})
-        reply = send_message(messages)
-        print(f"\nAI: {reply}")  
-        messages.append({"role": "assistant", "content": reply})
-        engine.say(reply)
-        engine.runAndWait()
-        
+        messages.append({"role": "user", "content": user_input})  # add user message
+        reply = send_message(messages)  # get AI response
+        print(f"\nAI: {reply}")  # print AI response
+        messages.append({"role": "assistant", "content": reply})  # add AI response to history
+        engine.say(reply)  # speak the AI response
+        engine.runAndWait()  # wait for speech to finish
 
 
+
+
+#start
 if __name__ == "__main__":
     chat()
 
