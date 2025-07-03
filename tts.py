@@ -3,7 +3,10 @@ import json
 import pyttsx3
 import whisper
 import pyaudio
-import wave 
+import wave
+import os
+import time
+
 
 
 # setup text-to-speech engine
@@ -12,7 +15,7 @@ engine = pyttsx3.init()
 
 # use to record audio from the microphone and save to a WAV file
 # filename: output file name, duration: seconds to record
-def record_audio(filename="input.wav", duration=5):
+def record_audio(filename="audio/input.wav", duration=5):
     FORMAT = pyaudio.paInt16  # audio format (16-bit PCM)
     CHANNELS = 1              # mono audio
     RATE = 16000              # sample rate (Hz)
@@ -49,8 +52,12 @@ def record_audio(filename="input.wav", duration=5):
         wf.setframerate(RATE)  #set sample rate
         wf.writeframes(b''.join(frames)) #set audio data
 
+    # Add a 20 second delay after recording to allow Whisper to process the audio
+    print(f"Saved file: {filename}")
+    print("Waiting 20 seconds to allow Whisper to process the audio...")
+    time.sleep(20)
 
-def transcribe_audio(filename="input.wav"):
+def transcribe_audio(filename="audio/input.wav"):
     print("Loading Whisper model...")
     try:
         model = whisper.load_model("base")  # or "small", "medium", "large"
@@ -60,5 +67,8 @@ def transcribe_audio(filename="input.wav"):
     except Exception as e:
         print("Error during transcription:", e)
 
-record_audio("input.wav", duration=5)
-transcribe_audio("input.wav")
+
+print("Current working directory:", os.getcwd())
+record_audio("audio/input.wav", duration=5)
+print("File exists:", os.path.isfile("audio/input.wav"))
+transcribe_audio("audio/input.wav")
